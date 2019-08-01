@@ -8,6 +8,7 @@ import org.apache.logging.log4j.core.config.plugins.*;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -21,7 +22,7 @@ public class ObizKafka extends AbstractAppender {
 
     private final KafkaManager manager;
 
-    protected ObizKafka(String name, Filter filter, Layout<? extends Serializable> layout, boolean ignoreExceptions, final KafkaManager manager) {
+    private ObizKafka(String name, Filter filter, Layout<? extends Serializable> layout, boolean ignoreExceptions, final KafkaManager manager) {
         super(name, filter, layout, ignoreExceptions);
         this.manager = Objects.requireNonNull(manager, "manager");
         AbstractLifeCycle.LOGGER.error("TST: ObizKafka created!");
@@ -45,7 +46,19 @@ public class ObizKafka extends AbstractAppender {
             layout = PatternLayout.newBuilder().withPattern("%t%m").build();
         }
 
-        //todo set not zero batch propertyArray.setProperty("batch.size", "00000");
+        boolean hasBatchSize = false;
+        for (int i = 0; i < propertyArray.length; i++) {
+            Property property = propertyArray[i];
+            if(property.getName().equals("batch.size")){
+                hasBatchSize = true;
+                break;
+            }
+        }
+
+        if(!hasBatchSize) {
+            propertyArray = Arrays.copyOf(propertyArray, propertyArray.length + 1);
+            propertyArray[propertyArray.length - 1] =  Property.createProperty("batch.size", "16384"); //as default of Kafka client
+        }
 
         AbstractLifeCycle.LOGGER.error("TST: Before create KafkaManager");
         final KafkaManager kafkaManager = new KafkaManager(LoggerContext.getContext(), name, topic, syncSend, propertyArray);
