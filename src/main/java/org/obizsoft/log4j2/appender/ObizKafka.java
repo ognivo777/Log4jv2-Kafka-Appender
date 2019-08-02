@@ -5,6 +5,7 @@ import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.appender.mom.kafka.KafkaManager;
 import org.apache.logging.log4j.core.config.Property;
 import org.apache.logging.log4j.core.config.plugins.*;
+import org.apache.logging.log4j.core.layout.JsonLayout;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
 import java.io.Serializable;
@@ -43,7 +44,17 @@ public class ObizKafka extends AbstractAppender {
         }
         if (layout == null) {
             AbstractLifeCycle.LOGGER.error("No layout provided for ObizKafka. Use default.");
-            layout = PatternLayout.newBuilder().withPattern("%t%m").build();
+            try {
+                layout = JsonLayout.newBuilder()
+                        .setComplete(false)
+                        .setCompact(true)
+                        .setEventEol(true)
+                        .setProperties(true)
+                        .build();
+            } catch (Exception e) {
+                //may be there is no needed classes in classpath, so create ugly PatternLayout than
+                layout = PatternLayout.newBuilder().withPattern("%d{DEFAULT_MICROS} [%t]<%c{2.}> %-5p: %m%n").build();
+            }
         }
 
         boolean hasBatchSize = false;
