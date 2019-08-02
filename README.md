@@ -14,31 +14,31 @@ Based on original log4j-kafka appender.
 
 1. Put latest **log4j2-kafka-appender.jar** from [releases page](https://github.com/ognivo777/Log4jv2-Kafka-Appender/releases/latest) into your classpath.
 1. Add new appender into log4j2.xml:
-```xml
-<Configuration status="warn">
-    <Appenders>
-    <!--...-->
-    <ObizKafka name="Kafka" topic="logstash-input-topic">
-        <Property name="bootstrap.servers">kafka-host:9092</Property>
-    </ObizKafka>
-    <!--...-->
-    </Appenders>
-<!--...-->
-</Configuration>
-```
+   ```xml
+   <Configuration status="warn">
+       <Appenders>
+       <!--...-->
+       <ObizKafka name="Kafka" topic="logstash-input-topic">
+           <Property name="bootstrap.servers">kafka-host:9092</Property>
+       </ObizKafka>
+       <!--...-->
+       </Appenders>
+   <!--...-->
+   </Configuration>
+   ```
 1. Add them into root:
-```xml
-<Configuration status="warn">
-<!--...-->
-	<Loggers>
-		<asyncRoot>
-			<AppenderRef ref="CONSOLE"/>
-			<AppenderRef ref="Kafka"/>
-		</asyncRoot>
-	</Loggers>
-	<!--...-->
-</Configuration>	
-```
+   ```xml
+   <Configuration status="warn">
+   <!--...-->
+	   <Loggers>
+   		<asyncRoot>
+   			<AppenderRef ref="CONSOLE"/>
+   			<AppenderRef ref="Kafka"/>
+   		</asyncRoot>
+   	</Loggers>
+   <!--...-->
+   </Configuration>	
+   ```
 
 ## Logstash
 
