@@ -12,7 +12,7 @@ Based on original log4j-kafka appender.
 
 ## Usage
 
-1. Put latest **log4j2-kafka-appender.jar** from releases page into your classpath.
+1. Put latest **log4j2-kafka-appender.jar** from [releases page](https://github.com/ognivo777/Log4jv2-Kafka-Appender/releases/latest) into your classpath.
 1. Add new appender into log4j2.xml:
 ```xml
 <Configuration status="warn">
